@@ -1,5 +1,6 @@
 package com.example.Backend.service;
 
+import com.example.Backend.dto.FerramentaDTO;
 import com.example.Backend.dto.FerramentaResponseDTO;
 import com.example.Backend.model.Ferramenta;
 import com.example.Backend.repository.FerrametaRepository;
@@ -15,9 +16,7 @@ public class FerramentaService {
     public FerramentaService(FerrametaRepository ferrametaRepository) {
         this.ferrametaRepository = ferrametaRepository;
     }
-
-
-    public List<Ferramenta> listarTodos() {
+    public List<FerramentaResponseDTO> listarTodos() {
         return ferrametaRepository.findAll()
                 .stream()
                 .map(ferramenta -> {
@@ -25,12 +24,36 @@ public class FerramentaService {
                             FerramentaResponseDTO(
                                     ferramenta.getId(),
                                     ferramenta.getNome(),
+                                    ferramenta.getMarca(),
                                     ferramenta.getTipo(),
                                     ferramenta.getFerramentaStatus()
                     );
                     return ferramentaResponseDTO;
-
                 }).toList();
+    }
+
+    public FerramentaResponseDTO salvar(FerramentaDTO ferramentaDTO) {
+        if (ferrametaRepository.findById(ferramentaDTO.getId()).isPresent()){
+            throw new RuntimeException("Ferramenta já cadastrada");
+        }
+        Ferramenta ferramenta = new Ferramenta(
+                null,
+                ferramentaDTO.getNome(),
+                ferramentaDTO.getMarca(),
+                ferramentaDTO.getTipo(),
+                ferramentaDTO.getFerramentaStatus()
+
+        );
+        ferrametaRepository.save(ferramenta);
+
+        FerramentaResponseDTO ferramentaResponseDTO = new FerramentaResponseDTO(
+                ferramenta.getId(),
+                ferramenta.getNome(),
+                ferramenta.getMarca(),
+                ferramenta.getTipo(),
+                ferramenta.getFerramentaStatus()
+        );
+        return ferramentaResponseDTO;
     }
 
 }
