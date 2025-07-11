@@ -9,6 +9,13 @@ public class FerramentaResponseDTO {
     private String tipo;
     private FerramentaStatus ferramentaStatus;
 
+    public FerramentaResponseDTO(String nome, String marca, String tipo, FerramentaStatus ferramentaStatus) {
+        this.nome = nome;
+        this.marca = marca;
+        this.tipo = tipo;
+        this.ferramentaStatus = ferramentaStatus;
+    }
+
     public String getNome() {
         return nome;
     }
