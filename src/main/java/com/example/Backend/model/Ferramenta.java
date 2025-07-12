@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.boot.model.naming.ImplicitEntityNameSource;
 
 @Entity
 public class Ferramenta {
@@ -13,9 +15,14 @@ public class Ferramenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
+    @NotBlank(message = "Nome é obrigatorio")
     private String nome;
+    @NotBlank(message = "Marca é obrigatorio")
     private String marca;
+    @NotBlank(message = "Tipo é obrigatorio")
     private String tipo;
+
     private FerramentaStatus ferramentaStatus;
 
     public Ferramenta() {
