@@ -3,7 +3,9 @@ package com.example.Backend.controller;
 import com.example.Backend.dto.FerramentaDTO;
 import com.example.Backend.dto.FerramentaResponseDTO;
 import com.example.Backend.service.FerramentaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/ferramenta")
 public class FerramentaController {
 
@@ -27,7 +30,7 @@ public class FerramentaController {
     }
 
     @PostMapping
-    public ResponseEntity<FerramentaResponseDTO> salvar(FerramentaDTO dto) {
+    public ResponseEntity<FerramentaResponseDTO> salvar(@Valid @RequestBody FerramentaDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ferramentaService.salvar(dto));
     }
 
@@ -39,6 +42,6 @@ public class FerramentaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<FerramentaResponseDTO> deletar(@PathVariable Long id) {
         ferramentaService.excluir(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
