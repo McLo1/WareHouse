@@ -3,7 +3,7 @@ package com.example.Backend.service;
 import com.example.Backend.dto.FerramentaDTO;
 import com.example.Backend.dto.FerramentaResponseDTO;
 import com.example.Backend.model.Ferramenta;
-import com.example.Backend.repository.FerrametaRepository;
+import com.example.Backend.repository.FerramentaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,13 +11,13 @@ import java.util.List;
 @Service
 public class FerramentaService {
 
-    private FerrametaRepository ferrametaRepository;
+    private FerramentaRepository ferramentaRepository;
 
-    public FerramentaService(FerrametaRepository ferrametaRepository) {
-        this.ferrametaRepository = ferrametaRepository;
+    public FerramentaService(FerramentaRepository ferramentaRepository) {
+        this.ferramentaRepository = ferramentaRepository;
     }
     public List<FerramentaResponseDTO> listarTodos() {
-        return ferrametaRepository.findAll()
+        return ferramentaRepository.findAll()
                 .stream()
                 .map(ferramenta -> {
                     FerramentaResponseDTO ferramentaResponseDTO = new
@@ -33,18 +33,18 @@ public class FerramentaService {
     }
 
     public FerramentaResponseDTO salvar(FerramentaDTO ferramentaDTO) {
-        if (ferrametaRepository.findById(ferramentaDTO.getId()).isPresent()){
+        if (ferramentaRepository.findByNome(ferramentaDTO.getNome()).isPresent()){
             throw new RuntimeException("Ferramenta já cadastrada");
         }
         Ferramenta ferramenta = new Ferramenta(
-                null,
+                ferramentaDTO.getId(),
                 ferramentaDTO.getNome(),
                 ferramentaDTO.getMarca(),
                 ferramentaDTO.getTipo(),
                 ferramentaDTO.getFerramentaStatus()
 
         );
-        ferrametaRepository.save(ferramenta);
+        ferramentaRepository.save(ferramenta);
 
         FerramentaResponseDTO ferramentaResponseDTO = new FerramentaResponseDTO(
                 ferramenta.getId(),
@@ -57,7 +57,7 @@ public class FerramentaService {
     }
 
     public FerramentaResponseDTO atualizar(FerramentaDTO ferramentaDTO) {
-        Ferramenta ferramenta = ferrametaRepository.findById(ferramentaDTO.getId()).map(f -> {
+        Ferramenta ferramenta = ferramentaRepository.findById(ferramentaDTO.getId()).map(f -> {
             f.setNome(ferramentaDTO.getNome());
             f.setMarca(ferramentaDTO.getMarca());
             f.setTipo(ferramentaDTO.getTipo());
@@ -67,7 +67,7 @@ public class FerramentaService {
         })
                 .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada"));
 
-        ferrametaRepository.save(ferramenta);
+        ferramentaRepository.save(ferramenta);
 
         FerramentaResponseDTO ferramentaResponseDTO = new FerramentaResponseDTO(
                 ferramenta.getId(),
@@ -80,10 +80,10 @@ public class FerramentaService {
     }
 
     public void excluir(Long id) {
-        Ferramenta ferramenta = ferrametaRepository.findById(id)
+        Ferramenta ferramenta = ferramentaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada"));
 
-        ferrametaRepository.deleteById(id);
+        ferramentaRepository.deleteById(id);
     }
 
 
