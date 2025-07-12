@@ -11,6 +11,9 @@ public class FerramentaDTO {
     private String tipo;
     private FerramentaStatus ferramentaStatus;
 
+    public FerramentaDTO() {
+    }
+
     public FerramentaDTO(Long id, String nome, String marca, String tipo, FerramentaStatus ferramentaStatus) {
         this.id = id;
         this.nome = nome;
