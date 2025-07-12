@@ -40,7 +40,7 @@ public class FerramentaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<FerramentaResponseDTO> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         ferramentaService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
