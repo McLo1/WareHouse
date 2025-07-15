@@ -11,25 +11,28 @@ import java.util.List;
 @Service
 public class FerramentaService {
 
-    private FerramentaRepository ferramentaRepository;
+    private final FerramentaRepository ferramentaRepository;
 
     public FerramentaService(FerramentaRepository ferramentaRepository) {
         this.ferramentaRepository = ferramentaRepository;
     }
+
+    //Mapper para conversão do DTORequest para DTO
+    private FerramentaResponseDTO toDTO(Ferramenta ferramenta) {
+        return new FerramentaResponseDTO(
+                ferramenta.getId(),
+                ferramenta.getNome(),
+                ferramenta.getMarca(),
+                ferramenta.getTipo(),
+                ferramenta.getFerramentaStatus()
+        );
+    }
+
     public List<FerramentaResponseDTO> listarTodos() {
         return ferramentaRepository.findAll()
                 .stream()
-                .map(ferramenta -> {
-                    FerramentaResponseDTO ferramentaResponseDTO = new
-                            FerramentaResponseDTO(
-                                    ferramenta.getId(),
-                                    ferramenta.getNome(),
-                                    ferramenta.getMarca(),
-                                    ferramenta.getTipo(),
-                                    ferramenta.getFerramentaStatus()
-                    );
-                    return ferramentaResponseDTO;
-                }).toList();
+                .map(this::toDTO) // < -- Utilizando a conversão toDTO ln20
+                .toList();
     }
 
     public FerramentaResponseDTO salvar(FerramentaDTO ferramentaDTO) {
@@ -46,14 +49,8 @@ public class FerramentaService {
         );
         ferramentaRepository.save(ferramenta);
 
-        FerramentaResponseDTO ferramentaResponseDTO = new FerramentaResponseDTO(
-                ferramenta.getId(),
-                ferramenta.getNome(),
-                ferramenta.getMarca(),
-                ferramenta.getTipo(),
-                ferramenta.getFerramentaStatus()
-        );
-        return ferramentaResponseDTO;
+
+        return toDTO(ferramenta);
     }
 
     public FerramentaResponseDTO atualizar(FerramentaDTO ferramentaDTO) {
@@ -69,14 +66,7 @@ public class FerramentaService {
 
         ferramentaRepository.save(ferramenta);
 
-        FerramentaResponseDTO ferramentaResponseDTO = new FerramentaResponseDTO(
-                ferramenta.getId(),
-                ferramenta.getNome(),
-                ferramenta.getMarca(),
-                ferramenta.getTipo(),
-                ferramenta.getFerramentaStatus()
-        );
-        return ferramentaResponseDTO;
+        return toDTO(ferramenta);
     }
 
     public void excluir(Long id) {
